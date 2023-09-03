@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_asteroids/asteroid.dart';
 import 'package:flutter_asteroids/enums.dart';
 import 'package:flutter_asteroids/helpers.dart';
 import 'package:flutter_asteroids/laser.dart';
@@ -10,12 +11,13 @@ class Ship {
   Ship({
     required this.size,
     required this.position,
+    required this.asteroids,
     this.speed = 0.2,
     this.rotationSpeed = 0.1,
     this.drag = 0.98,
   });
 
-  final double radius = 10;
+  final List<Asteroid> asteroids;
 
   Size size;
   Vector position;
@@ -23,13 +25,15 @@ class Ship {
   double rotationSpeed;
   double drag;
 
+  final double radius = 10;
+  final List<Laser> lasers = <Laser>[];
+
   bool isTurningLeft = false;
   bool isTurningRight = false;
   bool isThrusting = false;
 
   double _rotation = 0;
   Vector _velocity = Vector.zero();
-  final List<Laser> _lasers = <Laser>[];
 
   void update() {
     if (isTurningLeft) {
@@ -64,7 +68,7 @@ class Ship {
     canvas.restore();
   }
 
-  void shoot() => _lasers.add(
+  void shoot() => lasers.add(
         Laser(
           size: size,
           position: position,
@@ -72,6 +76,25 @@ class Ship {
           shipRadius: radius,
         ),
       );
+
+  void explode(Canvas canvas) {
+    final List<Color> colors = <Color>[
+      Colors.red,
+      Colors.orange,
+      Colors.yellow,
+    ];
+
+    final Paint paint = Paint()
+      ..strokeWidth = 2
+      ..color = colors[Random().nextInt(colors.length)]
+      ..style = PaintingStyle.fill;
+
+    canvas.drawCircle(
+      position.toOffset,
+      Random().nextDouble() * radius + radius,
+      paint,
+    );
+  }
 
   void _turn(Rotation rotation) =>
       _rotation += (rotation == Rotation.left ? -1 : 1) * rotationSpeed;
@@ -113,13 +136,13 @@ class Ship {
   }
 
   void _drawLaser(Canvas canvas) {
-    for (int i = 0; i < _lasers.length; i++) {
-      _lasers[i]
+    for (int i = 0; i < lasers.length; i++) {
+      lasers[i]
         ..render(canvas)
         ..update();
 
-      if (isOffScreen(_lasers[i].position, _lasers[i].radius, size)) {
-        _lasers.removeAt(i);
+      if (isOffScreen(lasers[i].position, lasers[i].radius, size)) {
+        lasers.removeAt(i);
       }
     }
   }

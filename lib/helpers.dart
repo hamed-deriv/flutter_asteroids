@@ -22,3 +22,14 @@ bool isOffScreen(Vector position, double radius, Size size) =>
     position.x > size.width + radius ||
     position.y < -radius ||
     position.y > size.height + radius;
+
+bool isColliding({
+  required Vector positionA,
+  required double radiusA,
+  required Vector positionB,
+  required double radiusB,
+}) {
+  final double distance = (positionA - positionB).magnitude;
+
+  return distance < radiusA + radiusB;
+}

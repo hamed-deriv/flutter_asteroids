@@ -21,6 +21,8 @@ class Vector {
 
   Vector operator +(Vector other) => Vector(x + other.x, y + other.y);
 
+  Vector operator -(Vector other) => Vector(x - other.x, y - other.y);
+
   Vector operator *(double scalar) => Vector(x * scalar, y * scalar);
 
   @override

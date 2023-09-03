@@ -6,12 +6,14 @@ class Playground extends CustomPainter {
   Playground({
     required this.ship,
     required this.asteroids,
+    required this.gameOver,
     this.drawDebug = false,
   });
 
-  final bool drawDebug;
   final Ship ship;
   final List<Asteroid> asteroids;
+  final bool gameOver;
+  final bool drawDebug;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -23,7 +25,11 @@ class Playground extends CustomPainter {
       asteroid.render(canvas);
     }
 
-    ship.render(canvas);
+    if (gameOver) {
+      ship.explode(canvas);
+    } else {
+      ship.render(canvas);
+    }
   }
 
   void _drawBorder(Canvas canvas, Size size) {

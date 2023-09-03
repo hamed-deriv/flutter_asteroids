@@ -9,9 +9,9 @@ class Asteroid {
     required this.size,
     required this.position,
     this.speed = 0.5,
-    double radius = 50,
+    this.radius = 50,
   }) {
-    _radius = Random().nextDouble() * radius / 2 + radius / 2;
+    radius = Random().nextDouble() * radius / 2 + radius / 2;
 
     for (int i = 0; i < _totalVertices; i++) {
       _verticesOffset.add(Random().nextInt(radius ~/ 2) - radius / 4);
@@ -25,14 +25,15 @@ class Asteroid {
   Vector position;
 
   Vector _velocity = Vector.zero();
-  late final double _radius;
+  double radius;
+
   final int _totalVertices = Random().nextInt(10) + 5;
   final List<double> _verticesOffset = <double>[];
 
   void update() {
     position += _velocity;
 
-    position = wrapEdges(position, _radius, size);
+    position = wrapEdges(position, radius, size);
   }
 
   void render(Canvas canvas) {
@@ -56,7 +57,7 @@ class Asteroid {
     for (int i = 0; i < _totalVertices; i++) {
       final double angle = 2 * pi * i / _totalVertices;
       final Vector vertex =
-          Vector.fromAngle(angle) * (_radius + _verticesOffset[i]);
+          Vector.fromAngle(angle) * (radius + _verticesOffset[i]);
 
       points.add(vertex.toOffset);
     }
