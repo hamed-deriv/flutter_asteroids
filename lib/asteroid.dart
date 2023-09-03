@@ -8,6 +8,7 @@ class Asteroid {
   Asteroid({
     required this.size,
     required this.position,
+    this.speed = 0.5,
     this.radius = 50,
   }) {
     radius = Random().nextDouble() * radius / 2 + radius / 2;
@@ -16,11 +17,12 @@ class Asteroid {
       _verticesOffset.add(Random().nextInt(radius ~/ 2) - radius / 4);
     }
 
-    velocity = Vector.random();
+    velocity = Vector.random() * speed;
   }
 
   Size size;
   Vector position;
+  double speed;
   double radius;
 
   Vector velocity = Vector.zero();
@@ -53,10 +55,10 @@ class Asteroid {
 
     for (int i = 0; i < _totalVertices; i++) {
       final double angle = 2 * pi * i / _totalVertices;
-      final double x = (radius + _verticesOffset[i]) * cos(angle);
-      final double y = (radius + _verticesOffset[i]) * sin(angle);
+      final Vector vertex =
+          Vector.fromAngle(angle) * (radius + _verticesOffset[i]);
 
-      points.add(Offset(x, y));
+      points.add(vertex.toOffset);
     }
 
     canvas.drawPath(
