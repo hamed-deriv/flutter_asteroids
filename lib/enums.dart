@@ -1,0 +1,1 @@
+enum Rotation { left, right }
