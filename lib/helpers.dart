@@ -16,3 +16,9 @@ Vector wrapEdges(Vector position, double radius, Size size) {
 
   return position;
 }
+
+bool isOffScreen(Vector position, double radius, Size size) =>
+    position.x < -radius ||
+    position.x > size.width + radius ||
+    position.y < -radius ||
+    position.y > size.height + radius;

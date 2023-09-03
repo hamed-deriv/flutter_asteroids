@@ -124,8 +124,10 @@ class _MainAppState extends State<MainApp> {
           case LogicalKeyboardKey.arrowUp:
             ship.isThrusting = false;
             break;
+          case LogicalKeyboardKey.space:
+            ship.shoot();
+            break;
         }
-        break;
     }
   }
 }

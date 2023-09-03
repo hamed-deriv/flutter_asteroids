@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_asteroids/enums.dart';
 import 'package:flutter_asteroids/helpers.dart';
+import 'package:flutter_asteroids/laser.dart';
 import 'package:flutter_asteroids/vector.dart';
 
 class Ship {
@@ -28,6 +29,7 @@ class Ship {
 
   double _rotation = 0;
   Vector _velocity = Vector.zero();
+  final List<Laser> _lasers = <Laser>[];
 
   void update() {
     if (isTurningLeft) {
@@ -49,6 +51,8 @@ class Ship {
   }
 
   void render(Canvas canvas) {
+    _drawLaser(canvas);
+
     canvas
       ..save()
       ..translate(position.x, position.y)
@@ -60,6 +64,15 @@ class Ship {
     canvas.restore();
   }
 
+  void shoot() => _lasers.add(
+        Laser(
+          size: size,
+          position: position,
+          angle: _rotation,
+          shipRadius: radius,
+        ),
+      );
+
   void _turn(Rotation rotation) =>
       _rotation += (rotation == Rotation.left ? -1 : 1) * rotationSpeed;
 
@@ -68,12 +81,8 @@ class Ship {
   void _drawShip(Canvas canvas) {
     final Paint paintBorder = Paint()
       ..color = Colors.green
-      ..strokeWidth = 3
+      ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
-
-    final Paint fillPaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.fill;
 
     final Path path = Path()
       ..moveTo(0, -radius)
@@ -82,9 +91,7 @@ class Ship {
       ..lineTo(-radius, radius)
       ..close();
 
-    canvas
-      ..drawPath(path, paintBorder)
-      ..drawPath(path, fillPaint);
+    canvas.drawPath(path, paintBorder);
   }
 
   void _drawThrust(Canvas canvas) {
@@ -102,6 +109,18 @@ class Ship {
         ..close();
 
       canvas.drawPath(flame, thrustPaint);
+    }
+  }
+
+  void _drawLaser(Canvas canvas) {
+    for (int i = 0; i < _lasers.length; i++) {
+      _lasers[i]
+        ..render(canvas)
+        ..update();
+
+      if (isOffScreen(_lasers[i].position, _lasers[i].radius, size)) {
+        _lasers.removeAt(i);
+      }
     }
   }
 }
