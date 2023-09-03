@@ -24,8 +24,8 @@ class Asteroid {
   double radius;
 
   Vector velocity = Vector.zero();
-  final _totalVertices = Random().nextInt(10) + 5;
-  final List<double> _verticesOffset = [];
+  final int _totalVertices = Random().nextInt(10) + 5;
+  final List<double> _verticesOffset = <double>[];
 
   void update() {
     position += velocity;
@@ -34,8 +34,9 @@ class Asteroid {
   }
 
   void render(Canvas canvas) {
-    canvas.save();
-    canvas.translate(position.x, position.y);
+    canvas
+      ..save()
+      ..translate(position.x, position.y);
 
     _drawAsteroid(canvas);
 
@@ -47,7 +48,8 @@ class Asteroid {
       ..color = Colors.grey
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
-    final List<Offset> points = [];
+
+    final List<Offset> points = <Offset>[];
 
     for (int i = 0; i < _totalVertices; i++) {
       final double angle = 2 * pi * i / _totalVertices;

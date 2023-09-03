@@ -49,10 +49,10 @@ class Ship {
   }
 
   void render(Canvas canvas) {
-    canvas.save();
-
-    canvas.translate(position.x, position.y);
-    canvas.rotate(_rotation + pi / 2);
+    canvas
+      ..save()
+      ..translate(position.x, position.y)
+      ..rotate(_rotation + pi / 2);
 
     _drawThrust(canvas);
     _drawShip(canvas);
@@ -82,8 +82,9 @@ class Ship {
       ..lineTo(-radius, radius)
       ..close();
 
-    canvas.drawPath(path, paintBorder);
-    canvas.drawPath(path, fillPaint);
+    canvas
+      ..drawPath(path, paintBorder)
+      ..drawPath(path, fillPaint);
   }
 
   void _drawThrust(Canvas canvas) {

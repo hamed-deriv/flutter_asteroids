@@ -27,7 +27,7 @@ class _MainAppState extends State<MainApp> {
     position: Vector(size.width / 2, size.height / 2),
   );
 
-  final List<Asteroid> asteroids = [];
+  final List<Asteroid> asteroids = <Asteroid>[];
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _MainAppState extends State<MainApp> {
           home: Scaffold(
             backgroundColor: Colors.black,
             body: Stack(
-              children: [
+              children: <Widget>[
                 _buildScore(),
                 _buildPlayground(),
               ],

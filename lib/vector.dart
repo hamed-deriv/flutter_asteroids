@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 class Vector {
   Vector(this.x, this.y);
 
-  double x;
-  double y;
-
   factory Vector.zero() => Vector(0, 0);
 
   factory Vector.fromAngle(double angle) => Vector(cos(angle), sin(angle));
 
   factory Vector.random() =>
       Vector(Random().nextDouble(), Random().nextDouble());
+
+  double x;
+  double y;
 
   Offset get toOffset => Offset(x, y);
 
