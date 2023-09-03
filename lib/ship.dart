@@ -14,20 +14,20 @@ class Ship {
     this.drag = 0.98,
   });
 
+  final double radius = 10;
+
   Size size;
   Vector position;
   double speed;
   double rotationSpeed;
   double drag;
 
-  final double radius = 10;
-
-  double _rotation = 0;
-  Vector _velocity = Vector.zero();
-
   bool isTurningLeft = false;
   bool isTurningRight = false;
   bool isThrusting = false;
+
+  double _rotation = 0;
+  Vector _velocity = Vector.zero();
 
   void update() {
     if (isTurningLeft) {
