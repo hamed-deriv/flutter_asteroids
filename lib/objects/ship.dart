@@ -1,32 +1,30 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_asteroids/asteroid.dart';
 import 'package:flutter_asteroids/enums.dart';
 import 'package:flutter_asteroids/helpers.dart';
-import 'package:flutter_asteroids/laser.dart';
+import 'package:flutter_asteroids/objects/laser.dart';
+import 'package:flutter_asteroids/objects/physical_object.dart';
 import 'package:flutter_asteroids/vector.dart';
 
-class Ship {
+class Ship extends PhysicalObject {
   Ship({
     required this.size,
-    required this.position,
+    required super.position,
     required this.asteroids,
-    this.speed = 0.2,
+    super.speed = 0.2,
+    super.radius = 10,
     this.rotationSpeed = 0.1,
     this.drag = 0.98,
   });
 
-  final List<Asteroid> asteroids;
+  final List<PhysicalObject> asteroids;
 
   Size size;
-  Vector position;
-  double speed;
   double rotationSpeed;
   double drag;
 
-  final double radius = 10;
-  final List<Laser> lasers = <Laser>[];
+  final List<PhysicalObject> lasers = <Laser>[];
 
   bool isTurningLeft = false;
   bool isTurningRight = false;
@@ -35,6 +33,7 @@ class Ship {
   double _rotation = 0;
   Vector _velocity = Vector.zero();
 
+  @override
   void update() {
     if (isTurningLeft) {
       _turn(Rotation.left);
@@ -49,11 +48,12 @@ class Ship {
     }
 
     position += _velocity;
-    position = wrapEdges(position, radius, size);
+    position = wrapEdges(this, size);
 
     _velocity *= drag;
   }
 
+  @override
   void render(Canvas canvas) {
     _drawLaser(canvas);
 
@@ -141,7 +141,7 @@ class Ship {
         ..render(canvas)
         ..update();
 
-      if (isOffScreen(lasers[i].position, lasers[i].radius, size)) {
+      if (isOffScreen(lasers[i], size)) {
         lasers.removeAt(i);
       }
     }

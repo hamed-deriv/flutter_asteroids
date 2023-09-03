@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_asteroids/objects/physical_object.dart';
 import 'package:flutter_asteroids/vector.dart';
 
-Vector wrapEdges(Vector position, double radius, Size size) {
-  if (position.x < -radius) {
-    position.x = size.width + radius;
-  } else if (position.x > size.width + radius) {
-    position.x = -radius;
+Vector wrapEdges(PhysicalObject object, Size size) {
+  final double x = object.position.x;
+  final double y = object.position.y;
+
+  if (x < 0) {
+    object.position = Vector(size.width, y);
+  } else if (x > size.width) {
+    object.position = Vector(0, y);
   }
 
-  if (position.y < -radius) {
-    position.y = size.height + radius;
-  } else if (position.y > size.height + radius) {
-    position.y = -radius;
+  if (y < 0) {
+    object.position = Vector(x, size.height);
+  } else if (y > size.height) {
+    object.position = Vector(x, 0);
   }
 
-  return position;
+  return object.position;
 }
 
-bool isOffScreen(Vector position, double radius, Size size) =>
-    position.x < -radius ||
-    position.x > size.width + radius ||
-    position.y < -radius ||
-    position.y > size.height + radius;
+bool isOffScreen(PhysicalObject object, Size size) =>
+    object.position.x < 0 ||
+    object.position.x > size.width ||
+    object.position.y < 0 ||
+    object.position.y > size.height;
 
 bool isColliding({
-  required Vector positionA,
-  required double radiusA,
-  required Vector positionB,
-  required double radiusB,
+  required PhysicalObject objectA,
+  required PhysicalObject objectB,
 }) {
-  final double distance = (positionA - positionB).magnitude;
+  final double distance = (objectA.position - objectB.position).magnitude;
 
-  return distance < radiusA + radiusB;
+  return distance < objectA.radius + objectB.radius;
 }

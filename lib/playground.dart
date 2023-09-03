@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_asteroids/asteroid.dart';
-import 'package:flutter_asteroids/ship.dart';
+import 'package:flutter_asteroids/objects/physical_object.dart';
+import 'package:flutter_asteroids/objects/ship.dart';
 
 class Playground extends CustomPainter {
   Playground({
@@ -11,7 +11,7 @@ class Playground extends CustomPainter {
   });
 
   final Ship ship;
-  final List<Asteroid> asteroids;
+  final List<PhysicalObject> asteroids;
   final bool gameOver;
   final bool drawDebug;
 
@@ -21,15 +21,11 @@ class Playground extends CustomPainter {
       _drawBorder(canvas, size);
     }
 
-    for (final Asteroid asteroid in asteroids) {
+    for (final PhysicalObject asteroid in asteroids) {
       asteroid.render(canvas);
     }
 
-    if (gameOver) {
-      ship.explode(canvas);
-    } else {
-      ship.render(canvas);
-    }
+    gameOver ? ship.explode(canvas) : ship.render(canvas);
   }
 
   void _drawBorder(Canvas canvas, Size size) {
@@ -38,10 +34,7 @@ class Playground extends CustomPainter {
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
-    canvas.drawRect(
-      Rect.fromLTWH(0, 0, size.width, size.height),
-      paint,
-    );
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
   }
 
   @override

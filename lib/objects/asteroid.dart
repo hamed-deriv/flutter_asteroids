@@ -2,14 +2,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_asteroids/helpers.dart';
+import 'package:flutter_asteroids/objects/physical_object.dart';
 import 'package:flutter_asteroids/vector.dart';
 
-class Asteroid {
+class Asteroid extends PhysicalObject {
   Asteroid({
     required this.size,
-    required this.position,
-    this.speed = 0.5,
-    this.radius = 50,
+    required super.position,
+    super.speed = 0.5,
+    super.radius = 50,
   }) {
     radius = Random().nextDouble() * radius / 2 + radius / 2;
 
@@ -21,21 +22,20 @@ class Asteroid {
   }
 
   final Size size;
-  final double speed;
-  Vector position;
 
   Vector _velocity = Vector.zero();
-  double radius;
 
   final int _totalVertices = Random().nextInt(10) + 5;
   final List<double> _verticesOffset = <double>[];
 
+  @override
   void update() {
     position += _velocity;
 
-    position = wrapEdges(position, radius, size);
+    position = wrapEdges(this, size);
   }
 
+  @override
   void render(Canvas canvas) {
     canvas
       ..save()

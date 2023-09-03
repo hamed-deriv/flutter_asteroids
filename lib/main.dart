@@ -3,10 +3,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_asteroids/asteroid.dart';
 import 'package:flutter_asteroids/helpers.dart';
+import 'package:flutter_asteroids/objects/asteroid.dart';
+import 'package:flutter_asteroids/objects/physical_object.dart';
+import 'package:flutter_asteroids/objects/ship.dart';
 import 'package:flutter_asteroids/playground.dart';
-import 'package:flutter_asteroids/ship.dart';
 import 'package:flutter_asteroids/vector.dart';
 
 const Size size = Size(600, 600);
@@ -21,7 +22,7 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  final List<Asteroid> asteroids = <Asteroid>[];
+  final List<PhysicalObject> asteroids = <Asteroid>[];
 
   late final Ship ship;
 
@@ -45,7 +46,7 @@ class _MainAppState extends State<MainApp> {
         ship.update();
       }
 
-      for (final Asteroid asteroid in asteroids) {
+      for (final PhysicalObject asteroid in asteroids) {
         asteroid.update();
       }
 
@@ -108,6 +109,7 @@ class _MainAppState extends State<MainApp> {
             ship: ship,
             asteroids: asteroids,
             gameOver: isGameOver,
+            drawDebug: true ,
           ),
         ),
       );
@@ -127,13 +129,8 @@ class _MainAppState extends State<MainApp> {
   }
 
   void _checkShipCollision() {
-    for (final Asteroid asteroid in asteroids) {
-      if (isColliding(
-        positionA: ship.position,
-        radiusA: ship.radius,
-        positionB: asteroid.position,
-        radiusB: asteroid.radius,
-      )) {
+    for (final PhysicalObject asteroid in asteroids) {
+      if (isColliding(objectA: ship, objectB: asteroid)) {
         isGameOver = true;
 
         break;
@@ -143,13 +140,8 @@ class _MainAppState extends State<MainApp> {
 
   void _checkLaserCollision() {
     for (int i = ship.lasers.length - 1; i >= 0; i--) {
-      for (final Asteroid asteroid in asteroids) {
-        if (isColliding(
-          positionA: ship.lasers[i].position,
-          radiusA: ship.lasers[i].radius,
-          positionB: asteroid.position,
-          radiusB: asteroid.radius,
-        )) {
+      for (final PhysicalObject asteroid in asteroids) {
+        if (isColliding(objectA: ship.lasers[i], objectB: asteroid)) {
           score += 10;
 
           ship.lasers.remove(ship.lasers[i]);
