@@ -18,6 +18,8 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
+  int score = 0;
+
   final Ship ship = Ship(
     size: size,
     position: Vector(size.width / 2, size.height / 2),
@@ -35,19 +37,41 @@ class _MainAppState extends State<MainApp> {
   }
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        home: Scaffold(
-          backgroundColor: Colors.black,
-          body: Center(
-            child: RawKeyboardListener(
-              focusNode: FocusNode(),
-              onKey: onKeyEvent,
-              child: CustomPaint(
-                size: size,
-                painter: Playground(ship: ship),
-              ),
+  Widget build(BuildContext context) => RawKeyboardListener(
+        focusNode: FocusNode(),
+        onKey: onKeyEvent,
+        child: MaterialApp(
+          home: Scaffold(
+            backgroundColor: Colors.black,
+            body: Stack(
+              children: [
+                _buildScore(),
+                _buildPlayground(),
+              ],
             ),
           ),
+        ),
+      );
+
+  Widget _buildScore() => Align(
+        alignment: Alignment.topLeft,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            'Score: $score',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ),
+      );
+
+  Widget _buildPlayground() => Center(
+        child: CustomPaint(
+          size: size,
+          painter: Playground(ship: ship),
         ),
       );
 
