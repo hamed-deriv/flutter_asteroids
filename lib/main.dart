@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_asteroids/asteroid.dart';
 import 'package:flutter_asteroids/playground.dart';
 import 'package:flutter_asteroids/ship.dart';
 import 'package:flutter_asteroids/vector.dart';
@@ -25,12 +27,20 @@ class _MainAppState extends State<MainApp> {
     position: Vector(size.width / 2, size.height / 2),
   );
 
+  final List<Asteroid> asteroids = [];
+
   @override
   void initState() {
     super.initState();
 
+    _generateAstroids();
+
     Timer.periodic(const Duration(milliseconds: 16), (_) {
       ship.update();
+
+      for (final Asteroid asteroid in asteroids) {
+        asteroid.update();
+      }
 
       setState(() {});
     });
@@ -39,7 +49,7 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) => RawKeyboardListener(
         focusNode: FocusNode(),
-        onKey: onKeyEvent,
+        onKey: _onKeyEventHandler,
         child: MaterialApp(
           home: Scaffold(
             backgroundColor: Colors.black,
@@ -61,7 +71,7 @@ class _MainAppState extends State<MainApp> {
             'Score: $score',
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 18,
               fontWeight: FontWeight.normal,
             ),
           ),
@@ -71,11 +81,25 @@ class _MainAppState extends State<MainApp> {
   Widget _buildPlayground() => Center(
         child: CustomPaint(
           size: size,
-          painter: Playground(ship: ship),
+          painter: Playground(ship: ship, asteroids: asteroids),
         ),
       );
 
-  void onKeyEvent(RawKeyEvent event) {
+  void _generateAstroids() {
+    for (int i = 0; i < 5; i++) {
+      asteroids.add(
+        Asteroid(
+          size: size,
+          position: Vector(
+            Random().nextDouble() * size.width,
+            Random().nextDouble() * size.height,
+          ),
+        ),
+      );
+    }
+  }
+
+  void _onKeyEventHandler(RawKeyEvent event) {
     switch (event.runtimeType) {
       case RawKeyDownEvent:
         switch (event.logicalKey) {

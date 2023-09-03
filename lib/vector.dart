@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 class Vector {
   Vector(this.x, this.y);
 
@@ -9,6 +11,11 @@ class Vector {
   factory Vector.zero() => Vector(0, 0);
 
   factory Vector.fromAngle(double angle) => Vector(cos(angle), sin(angle));
+
+  factory Vector.random() =>
+      Vector(Random().nextDouble(), Random().nextDouble());
+
+  Offset get toOffset => Offset(x, y);
 
   double get magnitude => sqrt(x * x + y * y);
 
