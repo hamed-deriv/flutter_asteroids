@@ -9,6 +9,7 @@ import 'package:flutter_asteroids/objects/physical_object.dart';
 import 'package:flutter_asteroids/objects/ship.dart';
 import 'package:flutter_asteroids/playground.dart';
 import 'package:flutter_asteroids/vector.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 const Size size = Size(600, 600);
 
@@ -62,6 +63,7 @@ class _MainAppState extends State<MainApp> {
         focusNode: FocusNode(),
         onKey: isGameOver ? null : _onKeyEventHandler,
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: Colors.black,
             body: Stack(
@@ -77,11 +79,11 @@ class _MainAppState extends State<MainApp> {
 
   Widget _buildGameOver() => Align(
         child: Text(
-          'Game Over\nScore: $score\n🙁',
+          'Game Over\n\nScore: $score\n\n',
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: GoogleFonts.pressStart2p(
             color: Colors.white,
-            fontSize: 54,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -93,10 +95,9 @@ class _MainAppState extends State<MainApp> {
           padding: const EdgeInsets.all(16),
           child: Text(
             'Score: $score',
-            style: const TextStyle(
+            style: GoogleFonts.pressStart2p(
               color: Colors.white,
               fontSize: 18,
-              fontWeight: FontWeight.normal,
             ),
           ),
         ),
@@ -109,7 +110,7 @@ class _MainAppState extends State<MainApp> {
             ship: ship,
             asteroids: asteroids,
             gameOver: isGameOver,
-            drawDebug: true ,
+            drawDebug: true,
           ),
         ),
       );
