@@ -2,7 +2,7 @@
 
 An Asteroids game built with Flutter. Blast your way through a field of asteroids, avoid collisions, and shoot lasers to survive. Have fun playing!
 
-![Game Screenshot](flutter_asteroids.png)
+![Game Screenshot](flutter_asteroids.gif)
 
 ## Features
 
