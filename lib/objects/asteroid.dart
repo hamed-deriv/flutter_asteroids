@@ -47,10 +47,13 @@ class Asteroid extends PhysicalObject {
   }
 
   void _drawAsteroid(Canvas canvas) {
-    final Paint paint = Paint()
-      ..color = Colors.grey
-      ..strokeWidth = 2
+    final Paint borderPaint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 1
+      ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 2)
       ..style = PaintingStyle.stroke;
+
+    final Paint paint = Paint()..color = Colors.black;
 
     final List<Offset> points = <Offset>[];
 
@@ -62,9 +65,14 @@ class Asteroid extends PhysicalObject {
       points.add(vertex.toOffset);
     }
 
-    canvas.drawPath(
-      Path()..addPolygon(points, true),
-      paint,
-    );
+    canvas
+      ..drawPath(
+        Path()..addPolygon(points, true),
+        paint,
+      )
+      ..drawPath(
+        Path()..addPolygon(points, true),
+        borderPaint,
+      );
   }
 }
