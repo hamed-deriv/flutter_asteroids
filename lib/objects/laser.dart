@@ -31,7 +31,9 @@ class Laser extends PhysicalObject {
     ..drawCircle(
       (Vector.fromAngle(angle) * shipRadius).toOffset,
       radius,
-      Paint()..color = Colors.red,
+      Paint()
+        ..color = Colors.red
+        ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 8),
     )
     ..restore();
 }

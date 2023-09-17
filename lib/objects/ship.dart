@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_asteroids/enums.dart';
 import 'package:flutter_asteroids/helpers.dart';
+import 'package:flutter_asteroids/objects/explosion_effect.dart';
 import 'package:flutter_asteroids/objects/laser.dart';
 import 'package:flutter_asteroids/objects/physical_object.dart';
 import 'package:flutter_asteroids/vector.dart';
@@ -77,24 +78,7 @@ class Ship extends PhysicalObject {
         ),
       );
 
-  void explode(Canvas canvas) {
-    final List<Color> colors = <Color>[
-      Colors.red,
-      Colors.orange,
-      Colors.yellow,
-    ];
-
-    final Paint paint = Paint()
-      ..strokeWidth = 2
-      ..color = colors[Random().nextInt(colors.length)]
-      ..style = PaintingStyle.fill;
-
-    canvas.drawCircle(
-      position.toOffset,
-      Random().nextDouble() * radius + radius,
-      paint,
-    );
-  }
+  void explode(Canvas canvas) => drawExplosion(canvas, size, position);
 
   void _turn(Rotation rotation) =>
       _rotation += (rotation == Rotation.left ? -1 : 1) * rotationSpeed;
@@ -120,7 +104,8 @@ class Ship extends PhysicalObject {
   void _drawThrust(Canvas canvas) {
     final Paint thrustPaint = Paint()
       ..color = Random().nextBool() ? Colors.yellow : Colors.red
-      ..strokeWidth = 2
+      ..maskFilter = const MaskFilter.blur(BlurStyle.solid, 4)
+      ..strokeWidth = 3
       ..style = PaintingStyle.stroke;
 
     if (isThrusting) {
